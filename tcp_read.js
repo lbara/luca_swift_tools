@@ -14,6 +14,7 @@ var num_frames = 0;
 var MAX_FRAMES = -1;
 
 var myData = Buffer.alloc(0);
+var progress_cnt = 0;
 
 client.connect(PORT, HOST, function() {
   console.log("Client connected");
@@ -41,6 +42,13 @@ client.on('data', function(data) {
     /* Check we can go all the way to the CRC */
     if (myData.length < idx+8+len) {
       break;
+    }
+
+
+    progress_cnt++;
+    if (progress_cnt == 1000) {
+      process.stdout.write('.');
+      progress_cnt = 0;
     }
 
     /* Validate CRC */
